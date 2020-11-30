@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/head :: header"></head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <div th:replace="/fragments/header :: header"></div>
+    <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content">
+                <div class="ecommerce-widget">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-12">
+                            <section class="panel panel-transparent">
+                                <header class="panel-heading">
+                                    <h2 class="panel-title">Create New User</h2>
+                                </header>
+                                <div class="panel-body">
+
+                                    <!-- ------------------------FORM START----------------------------- -->
+                                    <form class="needs-validation" novalidate th:action="@{/user/create}" method="post" th:object="${user}">
+                                        <div class="row">
+                                            <div class="form-group col">
+                                                <label for="firstName" class="col-form-label">First Name:</label>
+                                                <input id="firstName" type="text" class="form-control"
+                                                       placeholder="First Name" th:field="*{firstName}" required>
+                                                <div class="invalid-feedback">Please enter first name</div>
+                                            </div>
+                                            <div class="form-group col">
+                                                <label for="lastName" class="col-form-label">Last Name:</label>
+                                                <input id="lastName" type="text" class="form-control"
+                                                       placeholder="Last Name" th:field="*{lastName}" required>
+                                                <div class="invalid-feedback">Please enter last name</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col">
+                                                <label for="inputEmail">Email address:</label>
+                                                <input id="inputEmail" type="email" placeholder="name@example.com"
+                                                       class="form-control" th:field="*{userName}" required>
+                                                <div class="invalid-feedback">Please enter email</div>
+                                            </div>
+                                            <div class=" form-group col">
+                                                <label for="phoneNumber" class="text-muted">Mobile Number:</label>
+                                                <input type="tel" id="phoneNumber"
+                                                       class="form-control phone-inputmask"
+                                                       placeholder="(999) 999-9999" im-insert="true"
+                                                       th:field="*{phoneNumber}"
+                                                       pattern="^\d{10}$" maxlength="10" minlength="10" required>
+                                                <div class="invalid-feedback">Please enter 10 digit phone number</div>
+                                            </div>
+                                        </div>
+                                        <div class=" row">
+                                            <div class="form-group col">
+                                                <label for="password" class="col-form-label">Password:</label>
+                                                <input id="password" type="password" class="form-control"
+                                                       placeholder="password"
+                                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" th:field="*{password}" required>
+                                                <div class="invalid-feedback">
+                                                    Must contain at least one number and one uppercase and lowercase
+                                                    letter, and be 6 characters minimum
+                                                </div>
+                                            </div>
+                                            <div class="form-group col">
+                                                <label for="confirmPassword" class="col-form-label">Confirm
+                                                    Password:</label>
+                                                <input id="confirmPassword" type="password" class="form-control"
+                                                       placeholder="re-enter password" th:field="*{password}">
+                                            </div>
+                                        </div>
+                                        <div class=" row">
+                                            <div class="form-group col">
+                                                <label>Gender:</label><br>
+                                                <label class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" name="radio-inline" checked="" th:field="*{gender}" th:value="MALE" class="custom-control-input"><span class="custom-control-label">Male</span>
+                                                </label>
+                                                <label class=" custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" name="radio-inline" th:field="*{gender}" th:value="FEMALE" class="custom-control-input"><span class="custom-control-label">Female</span>
+                                                </label>
+                                            </div>
+                                            <div class=" form-group col">
+                                                <label>Choose a Role:</label>
+                                                <select name="role" id="roleId" class="custom-select"
+                                                        required="required" th:field="*{role}">
+                                                    <option th:value=" ''" th:text="Select"></option>
+                                                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.description}"></option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-sm-12">
+                                                <div class="float-right">
+                                                    <button type="submit" class="btn btn-success">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <!-- ------------------------FORM END----------------------------- -->
+
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ------------------------TABLE START----------------------------- -->
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="col-md-12">
+                            <section class="panel">
+                                <header class="panel-heading">
+                                    <h2 class="panel-title">User List</h2>
+                                </header>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">E-Mail (username)</th>
+                                                <th scope="col">Gender</th>
+                                                <th scope="col">Phone</th>
+                                                <th scope="col">Role</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="user : ${users}">
+                                                <td scope="col" th:text="${user.firstName + ' ' + user.lastName}"></td>
+                                                <td scope="col" th:text="${user.userName}"></td>
+                                                <td scope="col" th:text="${user.gender.value}"></td>
+                                                <td scope="col" th:text="${user.phoneNumber}"></td>
+                                                <td scope="col" th:text="${user.role.description}"></td>
+                                                <td class="actions">
+                                                    <a th:href="@{/user/update/{id}(id=${user.userName})}"><button type="button" class="btn btn-warning rounded-0 btn-sm">Update</button></a>
+                                                    <a th:href="@{/user/delete/{id}(id=${user.userName})}" class="delete-row"><button type="button" class="btn btn-danger rounded-0 btn-sm">Delete</button></a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ------------------------TABLE END----------------------------- -->
+
+            </div>
+        </div>
+    </div>
+    <div th:replace="/fragments/footer :: footer"></div>
+</div>
+<div th:replace="/fragments/javascript :: js"></div>
+
+</body>
+</html>
